@@ -13,6 +13,26 @@
                 link.id = 'fieldsetcollapser' + i;
                 link.className = 'collapse-toggle';
                 link.href = '#';
+
+                // State -> 0: Collapsed, 1: Expanded
+                if ('fieldsetName' in elem.dataset) {
+                    let fieldsetName = elem.dataset.fieldsetName;
+                    // Return NaN if item is not found
+                    let fieldsetState = parseInt(localStorage.getItem(fieldsetName));
+                    if (isNaN(fieldsetState)) {
+                        // Add a new fieldset to localStorage
+                        let state = elem.classList.contains('expanded') ? 1 : 0;
+                        localStorage.setItem(fieldsetName, state);
+                    } else {
+                        // Set current fieldset state
+                        if (fieldsetState === 1) {
+                            elem.classList.add('expanded');
+                        } else if (fieldsetState === 0) {
+                            elem.classList.remove('expanded');
+                        }
+                    }
+                }
+
                 // changed: can opt into starting visible
                 if (elem.classList.contains('expanded')) {
                   link.textContent = gettext('Hide');
@@ -35,10 +55,18 @@
                     // Show
                     ev.target.textContent = gettext('Hide');
                     fieldset.classList.remove('collapsed');
+                    // Change fieldset state
+                    if ('fieldsetName' in fieldset.dataset) {
+                        localStorage.setItem(fieldset.dataset.fieldsetName, 1);
+                    }
                 } else {
                     // Hide
                     ev.target.textContent = gettext('Show');
                     fieldset.classList.add('collapsed');
+                    // Change fieldset state
+                    if ('fieldsetName' in fieldset.dataset) {
+                        localStorage.setItem(fieldset.dataset.fieldsetName, 0);
+                    }
                 }
             }
         };

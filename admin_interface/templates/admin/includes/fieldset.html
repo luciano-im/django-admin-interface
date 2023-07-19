@@ -1,4 +1,6 @@
-<fieldset class="module aligned {{ fieldset.classes }}">
+{% load static admin_interface_tags %}
+
+<fieldset class="module aligned {{ fieldset.classes }}" {% if fieldset.name %}data-fieldset-name="{{ opts.app_label }}-{{ opts.model_name }}-{{ fieldset.name|admin_interface_slugify }}"{% endif %}>
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
